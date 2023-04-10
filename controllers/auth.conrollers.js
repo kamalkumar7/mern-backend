@@ -12,11 +12,8 @@ export const signup = async (req, res, next) => {
 
     if(user)
     {
-      console.log(user +" found");
       res.status(409).json("user already Registered")
     }else{
-      // console.log(user +" not found");
-      console.log(req.body);
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(req.body.password, salt);
       const newUser = new User({ ...req.body, password: hash });
@@ -33,9 +30,7 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   try {
-    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
-    console.log(user);
     if (!user) return next(createError(404, "User not found!"));
 
     const isCorrect = await bcrypt.compare(req.body.password, user.password);
